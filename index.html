@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+      :root {
+        --bg: #fff;
+        --fg: #222;
+        --br: #ccc;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        :root{
+          --bg: #222;
+          --fg: #FFF;
+          --br: #666;
+        }
+      }
+      html, body{
+        background: var(--bg);
+        color: var(--fg);
+        margin: 0;
+        padding: 0;
+        font-family: Segoe UI, sans-serif;
+      }
+      main{
+        max-width: 768px;
+        margin: 0 auto;
+        padding: 16px;
+        box-sizing: border-box;
+      }
+      input{
+        background: var(--bg);
+        color: var(--fg); 
+        border: 2px solid var(--br);
+        border-radius: 4px;
+        width: 100%;
+        padding: 8px;
+        margin-top: 16px;
+        font-size: 16px;
+        box-sizing: border-box;
+      }
+      ul{
+        min-height: 240px;
+        padding: 0;
+      }
+      li{
+        display: block;
+        list-style-type: none;
+        margin-bottom: 8px;
+      }
+      small{
+        display: block;
+        margin-top: 32px;
+        padding-top: 16px;
+        padding-bottom: 16px;
+        border-top: 1px solid var(--br);
+        color: var(--br);
+      }
+    </style>
+</head>
+<body>
+  <main>
+    <h1>Увага: контент від розробників з РФ</h1>
+    <p>Не фінансуйте війну через цифрові покупки. Придбання асетів у цих авторів — це податки в бюджет країни-агресора. Обирайте свідомо та уникайте студій з цього списку:</p>
+
+    <section>
+      <input type="text" placeholder="Пошук студії..." id="search" onkeyup="filterStudios()">
+      <ul id="list">
+
+      </ul>
+    </section>
+
+    <small>
+      Основу цього списку заклав Пан Тараc зі спільноти Інформагенство "Le Флудилка", величезна йому подяка!
+    </small>
+  </main>
+    <script>
+      fetch('./list.json')
+        .then(response => response.json())
+        .then(data => {
+          const list = document.getElementById('list');
+          data.forEach((studio, index) => {
+            const li = document.createElement('li');
+            li.textContent = index+1 + '. ' + studio.name;
+            list.appendChild(li);
+          });
+        });
+
+        const filterStudios = () => {
+          const input = document.getElementById('search');
+          const filter = input.value.toLowerCase();
+          const list = document.getElementById('list');
+          const li = list.getElementsByTagName('li');
+
+          for (let i = 0; i < li.length; i++) {
+            const textValue = li[i].textContent || li[i].innerText;
+            if (textValue.toLowerCase().indexOf(filter) > -1) {
+              li[i].style.display = '';
+            } else {
+              li[i].style.display = 'none';
+            }
+          }
+        };
+    </script>
+</body>
+</html>
